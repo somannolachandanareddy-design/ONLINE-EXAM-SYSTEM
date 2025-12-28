@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Online Examination System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="loginPage" class="page active">
+        <div class="login-container">
+            <div class="login-header">
+                <p class="tagline" style="font-size: 25px;font-weight:bold;"> Online Examination Platform</p>
+            </div>
+
+            <div class="login-tabs">
+                <button class="tab-btn active" data-role="student">Student Login</button>
+                <button class="tab-btn" data-role="admin">Admin Login</button>
+            </div>
+
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" required placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" required placeholder="Enter your password">
+                </div>
+                <button type="submit" class="btn btn-primary">Sign In</button>
+                <div class="demo-credentials">
+                    <p><strong>Demo Credentials:</strong></p>
+                    <p>Student: <code>student1</code> / <code>pass123</code></p>
+                    <p>Admin: <code>admin</code> / <code>admin123</code></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Student Dashboard -->
+    <div id="studentDashboard" class="page">
+        <nav class="navbar">
+            <div class="nav-brand">
+                <span>Exam Courses</span>
+            </div>
+            <div class="nav-right">
+                <span class="user-info" >Welcome! , <strong id="studentName"></strong></span>
+                <button class="btn btn-outline" onclick="logout()">Logout</button>
+            </div>
+        </nav>
+
+        <div class="container">
+            <h2 class="page-title">Available Examinations</h2>
+            
+            <div class="exam-grid" id="examList">
+                <!-- Exams will be populated here -->
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">Your Attempt History</h3>
+                <div class="history-list" id="attemptHistory">
+                    <!-- History will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exam Page -->
+    <div id="examPage" class="page">
+        <nav class="navbar exam-nav">
+            <div class="nav-brand">
+                <span id="examTitle"></span>
+            </div>
+            <div class="nav-right">
+                <div class="timer" id="timer">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    <span id="timeDisplay">00:00</span>
+                </div>
+            </div>
+        </nav>
+
+        <div class="exam-container">
+            <div class="exam-sidebar">
+                <div class="question-palette">
+                    <h4>Question Palette</h4>
+                    <div id="questionPalette" class="palette-grid">
+                        <!-- Question buttons will be populated here -->
+                    </div>
+                    <div class="palette-legend">
+                        <div class="legend-item">
+                            <span class="legend-dot answered"></span>
+                            <span>Answered</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-dot"></span>
+                            <span>Not Visited</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="exam-content">
+                <div class="question-container" id="questionContainer">
+                    <!-- Current question will be displayed here -->
+                </div>
+
+                <div class="exam-controls">
+                    <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()">Previous</button>
+                    <button class="btn btn-secondary" id="nextBtn" onclick="nextQuestion()">Next</button>
+                    <button class="btn btn-danger" onclick="submitExam()">Submit Exam</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Page -->
+    <div id="resultsPage" class="page">
+        <nav class="navbar">
+            <div class="nav-right">
+                <button class="btn btn-outline" onclick="goToDashboard()">Back to Dashboard</button>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div class="results-card">
+                <div class="results-header">
+                    <h2>Examination Results</h2>
+                    <div class="status-badge" id="statusBadge"></div>
+                </div>
+
+                <div class="results-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-value" id="scoreValue"></div>
+                        <div class="stat-label">Your Score</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✓</div>
+                        <div class="stat-value" id="correctCount"></div>
+                        <div class="stat-label">Correct Answers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">✗</div>
+                        <div class="stat-value" id="wrongCount"></div>
+                        <div class="stat-label">Wrong Answers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⏱️</div>
+                        <div class="stat-value" id="timeTaken"></div>
+                        <div class="stat-label">Time Taken</div>
+                    </div>
+                </div>
+
+                <div class="results-details" id="resultsDetails">
+                    <!-- Detailed results will be shown here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="adminDashboard" class="page">
+        <nav class="navbar">
+            <div class="nav-right">
+                <span class="user-info">Admin Panel</span>
+                <button class="btn btn-outline" onclick="logout()">Logout</button>
+            </div>
+        </nav>
+
+        <div class="container">
+            <h2 class="page-title">Examination Analytics</h2>
+
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <div class="card-header">
+                        <h3>Total Attempts</h3>
+                        <span class="card-icon">📝</span>
+                    </div>
+                    <div class="card-value" id="totalAttempts">0</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="card-header">
+                        <h3>Average Score</h3>
+                        <span class="card-icon">📈</span>
+                    </div>
+                    <div class="card-value" id="avgScore">0%</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="card-header">
+                        <h3>Pass Rate</h3>
+                        <span class="card-icon">✅</span>
+                    </div>
+                    <div class="card-value" id="passRate">0%</div>
+                </div>
+                <div class="analytics-card">
+                    <div class="card-header">
+                        <h3>Active Students</h3>
+                        <span class="card-icon">👥</span>
+                    </div>
+                    <div class="card-value" id="activeStudents">0</div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">Exam-wise Performance</h3>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Exam Name</th>
+                                <th>Total Attempts</th>
+                                <th>Average Score</th>
+                                <th>Pass Rate</th>
+                                <th>Highest Score</th>
+                            </tr>
+                        </thead>
+                        <tbody id="examAnalytics">
+                            <!-- Analytics data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3 class="section-title">Recent Attempts</h3>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Exam</th>
+                                <th>Score</th>
+                                <th>Status</th>
+                                <th>Date & Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentAttempts">
+                            <!-- Recent attempts will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>

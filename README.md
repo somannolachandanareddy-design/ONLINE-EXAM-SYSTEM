@@ -1,6 +1,6 @@
 # ONLINE-EXAM-SYSTEM
 
-URL link - http://127.0.0.1:5500/index.html
+URL link - https://somannolachandanareddy-design.github.io/ONLINE-EXAM-SYSTEM/
 
 Online Examination System
 
